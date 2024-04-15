@@ -173,7 +173,7 @@ void Run( int argc, char_t** argv )
 
 	if ( ::SetProcessInformation( process.get(), ProcessPowerThrottling, &processPowerThrottle, sizeof( PROCESS_POWER_THROTTLING_STATE ) ) == 0 )
 		SystemError( ::GetLastError() );
-	if ( ::SetPriorityClass( process.get(), IDLE_PRIORITY_CLASS ) == 0 )
+	if ( ::SetPriorityClass( process.get(), processPriority ) == 0 )
 		SystemError( ::GetLastError() );
 	if ( ::SetProcessInformation( process.get(), ProcessMemoryPriority, &processMemPriority, sizeof( MEMORY_PRIORITY_INFORMATION ) ) == 0 )
 		SystemError( ::GetLastError() );
