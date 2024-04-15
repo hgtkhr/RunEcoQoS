@@ -18,7 +18,7 @@ The program uses the following method to make an application process EcoQoS
   
 The operating priority of processes and threads is set based on the value of this setting.  
 Set an appropriate value for stable operation of the application.  
-If the default **/Priority:NORMAL** does not attach the efficiency mode icon in the task manager, try setting it to **/Priority:LOW**.  
+If the default **/Priority:NORMAL** does not attach the efficiency mode icon in the task manager, try setting it to **/Priority:IDLE**.  
 See **[SetPriorityClass function (processthreadsapi.h)](https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-setpriorityclass) .**  
   
 Value|Meaning
