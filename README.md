@@ -1,4 +1,3 @@
-Welcome to the RunEcoQoS wiki!
 # RunEcoQos
 This repository describes the ability to explicitly launch an executable file as an Eco QoS process.
 Eco QoS is a Windows 11 feature that allows app processes to run more power efficiently.
