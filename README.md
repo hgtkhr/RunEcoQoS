@@ -19,7 +19,7 @@ Command line option: `/MemPriority:{VERY_LOW|LOW|MEDIUM|BELOW_NORMAL|NORMAL}`
 |LOW|Low memory priority.|
 |MEDIUM|Medium memory priority.|
 |PRIORITY_BELOW_NORMAL|Below normal memory priority.|
-|MEMORY_PRIORITY_NORMAL|This is the default priority for all threads and processes on the system.|
+|NORMAL|This is the default priority for all threads and processes on the system.|
 
 **MEMORY_PRIORITY_INFORMATION structure (processthreadsapi.h)**
 https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/ns-processthreadsapi-memory_priority_information
