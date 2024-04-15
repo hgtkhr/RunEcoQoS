@@ -28,12 +28,17 @@ using char_t = TCHAR;
 using string_t = std::basic_string< char_t >;
 using scoped_handle = std::unique_ptr< HANDLE, safe_handle_closer< HANDLE > >;
 
-void Run( int argc, char_t** argv )
+inline bool ParseMemPriority( MEMORY_PRIORITY_INFORMATION& memPriority, const string_t& argument )
 {
-	string_t appname = ToString( ComplatePath( argv[1] ) );
-	string_t cmdline = std::format( _T( "\"{}\"" ), appname );
+	static const string_t SwitchMemPriority = _T( "/MEMPRIORITY:" );
 
-	static const string_t SwitchMemPriority = _T( "/MemPriority:" );
+	string_t arg = argument;
+
+	::CharUpper( arg.data() );
+
+	if ( !arg.starts_with( SwitchMemPriority ) )
+		return false;
+
 	static const std::unordered_map< string_t, ULONG > MemPriorities =
 	{
 		{ _T( "VERY_LOW" ),	MEMORY_PRIORITY_VERY_LOW },
@@ -43,34 +48,95 @@ void Run( int argc, char_t** argv )
 		{ _T( "NORMAL" ), MEMORY_PRIORITY_NORMAL },
 	};
 
+	string_t sval = arg.substr( SwitchMemPriority.length() );
+
+	if ( sval.length() == 0 )
+		SystemError( ERROR_BAD_ARGUMENTS );
+
+	auto i = MemPriorities.find( sval );
+	if ( i != MemPriorities.end() )
+	{
+		memPriority.MemoryPriority = i->second;
+	}
+	else
+	{
+		SystemError( ERROR_BAD_ARGUMENTS );
+	}
+
+	return true;
+}
+
+inline bool ParseProcessPriority( DWORD& processPriority, const string_t& argument )
+{
+	static const string_t SwitchProcessPriority = _T( "/PRIORITY:" );
+
+	string_t arg = argument;
+
+	::CharUpper( arg.data() );
+
+	if ( !arg.starts_with( SwitchProcessPriority ) )
+		return false;
+
+	static const std::unordered_map< string_t, ULONG > MemPriorities =
+	{
+		{ _T( "ABOVE_NORMAL" ),	ABOVE_NORMAL_PRIORITY_CLASS },
+		{ _T( "BELOW_NORMAL" ), BELOW_NORMAL_PRIORITY_CLASS },
+		{ _T( "HIGH" ), HIGH_PRIORITY_CLASS },
+		{ _T( "BELOW_NORMAL" ), MEMORY_PRIORITY_BELOW_NORMAL },
+		{ _T( "IDLE" ), IDLE_PRIORITY_CLASS },
+		{ _T( "BACKGROUND" ), PROCESS_MODE_BACKGROUND_BEGIN },
+		{ _T( "REALTIME" ), REALTIME_PRIORITY_CLASS },
+		{ _T( "NORMAL" ), NORMAL_PRIORITY_CLASS },
+	};
+
+	string_t sval = arg.substr( SwitchProcessPriority.length() );
+
+	if ( sval.length() == 0 )
+		SystemError( ERROR_BAD_ARGUMENTS );
+
+	auto i = MemPriorities.find( sval );
+	if ( i != MemPriorities.end() )
+	{
+		processPriority = i->second;
+	}
+	else
+	{
+		SystemError( ERROR_BAD_ARGUMENTS );
+	}
+
+	return true;
+}
+
+void Run( int argc, char_t** argv )
+{
+	string_t cmdline;
+	string_t appname = ToString( ComplatePath( argv[1] ) );
+
+	if ( std::ranges::any_of( appname, &::_istspace ) )
+		cmdline = std::format( _T( "\"{}\"" ), appname );
+	else
+		cmdline = appname;
+
+	DWORD processPriority = 0;
 	PROCESS_POWER_THROTTLING_STATE processPowerThrottle = {};
 	MEMORY_PRIORITY_INFORMATION processMemPriority = {};
 
+	processPriority = NORMAL_PRIORITY_CLASS;
+
+	processPowerThrottle.Version = PROCESS_POWER_THROTTLING_CURRENT_VERSION;
+	processPowerThrottle.ControlMask = PROCESS_POWER_THROTTLING_EXECUTION_SPEED;
+	processPowerThrottle.StateMask = PROCESS_POWER_THROTTLING_EXECUTION_SPEED;
+
+	processMemPriority.MemoryPriority = MEMORY_PRIORITY_NORMAL;
+		
 	for ( int i = 2; i < argc; ++i )
 	{
 		string_t arg = argv[i];
 
-		if ( arg.starts_with( SwitchMemPriority ) )
-		{
-			string_t sval = arg.substr( SwitchMemPriority.length() );
-
-			if ( sval.length() == 0 )
-				SystemError( ERROR_BAD_ARGUMENTS );
-
-			::CharUpper( sval.data() );
-
-			auto i = MemPriorities.find( sval );
-			if ( i != MemPriorities.end() )
-			{
-				processMemPriority.MemoryPriority = i->second;
-			}
-			else
-			{
-				SystemError( ERROR_BAD_ARGUMENTS );
-			}
-
+		if ( ParseMemPriority( processMemPriority, arg ) )
 			continue;
-		}
+		else if ( ParseProcessPriority( processPriority, arg ) )
+			continue;
 
 		if ( std::ranges::any_of( arg, &::_istspace ) )
 		{
@@ -81,6 +147,9 @@ void Run( int argc, char_t** argv )
 			cmdline += std::format( _T( " {}" ), arg );
 		}
 	}
+
+	if ( cmdline.empty() )
+		SystemError( ERROR_BAD_ARGUMENTS );
 
 	STARTUPINFO si = {};
 	PROCESS_INFORMATION pi = {};
@@ -101,10 +170,6 @@ void Run( int argc, char_t** argv )
 
 	scoped_handle process( pi.hProcess );
 	scoped_handle primaryThread( pi.hThread );
-
-	processPowerThrottle.Version = PROCESS_POWER_THROTTLING_CURRENT_VERSION;
-	processPowerThrottle.ControlMask = PROCESS_POWER_THROTTLING_EXECUTION_SPEED;
-	processPowerThrottle.StateMask = PROCESS_POWER_THROTTLING_EXECUTION_SPEED;
 
 	if ( ::SetProcessInformation( process.get(), ProcessPowerThrottling, &processPowerThrottle, sizeof( PROCESS_POWER_THROTTLING_STATE ) ) == 0 )
 		SystemError( ::GetLastError() );
