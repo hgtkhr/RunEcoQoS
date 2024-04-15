@@ -129,6 +129,7 @@ int _tmain( int argc, char_t** argv )
 	catch ( std::system_error& e )
 	{
 		::MessageBox( HWND_DESKTOP, MessgaeString( e.what() ).c_str(), nullptr, MB_OK | MB_ICONERROR);
+		return e.code().value();
 	}
 
 	return EXIT_SUCCESS;
