@@ -18,7 +18,7 @@ Command line option: `/MemPriority:{VERY_LOW|LOW|MEDIUM|BELOW_NORMAL|NORMAL}`
 |VERY_LOW|Very low memory priority.|
 |LOW|Low memory priority.|
 |MEDIUM|Medium memory priority.|
-|PRIORITY_BELOW_NORMAL|Below normal memory priority.|
+|BELOW_NORMAL|Below normal memory priority.|
 |NORMAL|This is the default priority for all threads and processes on the system.|
 
 **MEMORY_PRIORITY_INFORMATION structure (processthreadsapi.h)**
