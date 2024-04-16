@@ -55,13 +55,9 @@ inline bool ParseMemPriority( MEMORY_PRIORITY_INFORMATION& memPriority, const st
 
 	auto i = MemPriorities.find( sval );
 	if ( i != MemPriorities.end() )
-	{
 		memPriority.MemoryPriority = i->second;
-	}
 	else
-	{
 		SystemError( ERROR_BAD_ARGUMENTS );
-	}
 
 	return true;
 }
@@ -96,13 +92,9 @@ inline bool ParseProcessPriority( DWORD& processPriority, const string_t& argume
 
 	auto i = MemPriorities.find( sval );
 	if ( i != MemPriorities.end() )
-	{
 		processPriority = i->second;
-	}
 	else
-	{
 		SystemError( ERROR_BAD_ARGUMENTS );
-	}
 
 	return true;
 }
@@ -121,7 +113,7 @@ void Run( int argc, char_t** argv )
 	PROCESS_POWER_THROTTLING_STATE processPowerThrottle = {};
 	MEMORY_PRIORITY_INFORMATION processMemPriority = {};
 
-	processPriority = NORMAL_PRIORITY_CLASS;
+	processPriority = IDLE_PRIORITY_CLASS;
 
 	processPowerThrottle.Version = PROCESS_POWER_THROTTLING_CURRENT_VERSION;
 	processPowerThrottle.ControlMask = PROCESS_POWER_THROTTLING_EXECUTION_SPEED;
@@ -135,17 +127,13 @@ void Run( int argc, char_t** argv )
 
 		if ( ParseMemPriority( processMemPriority, arg ) )
 			continue;
-		else if ( ParseProcessPriority( processPriority, arg ) )
+		if ( ParseProcessPriority( processPriority, arg ) )
 			continue;
 
 		if ( std::ranges::any_of( arg, &::_istspace ) )
-		{
 			cmdline += std::format( _T( " \"{}\"" ), arg );
-		}
 		else
-		{
 			cmdline += std::format( _T( " {}" ), arg );
-		}
 	}
 
 	if ( cmdline.empty() )
