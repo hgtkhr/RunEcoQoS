@@ -73,12 +73,11 @@ inline bool ParseProcessPriority( DWORD& processPriority, const string_t& argume
 	if ( !arg.starts_with( SwitchProcessPriority ) )
 		return false;
 
-	static const std::unordered_map< string_t, ULONG > MemPriorities =
+	static const std::unordered_map< string_t, ULONG > ProcessPriorities =
 	{
 		{ _T( "ABOVE_NORMAL" ),	ABOVE_NORMAL_PRIORITY_CLASS },
 		{ _T( "BELOW_NORMAL" ), BELOW_NORMAL_PRIORITY_CLASS },
 		{ _T( "HIGH" ), HIGH_PRIORITY_CLASS },
-		{ _T( "BELOW_NORMAL" ), MEMORY_PRIORITY_BELOW_NORMAL },
 		{ _T( "IDLE" ), IDLE_PRIORITY_CLASS },
 		{ _T( "BACKGROUND" ), PROCESS_MODE_BACKGROUND_BEGIN },
 		{ _T( "REALTIME" ), REALTIME_PRIORITY_CLASS },
@@ -90,8 +89,8 @@ inline bool ParseProcessPriority( DWORD& processPriority, const string_t& argume
 	if ( sval.length() == 0 )
 		SystemError( ERROR_BAD_ARGUMENTS );
 
-	auto i = MemPriorities.find( sval );
-	if ( i != MemPriorities.end() )
+	auto i = ProcessPriorities.find( sval );
+	if ( i != ProcessPriorities.end() )
 		processPriority = i->second;
 	else
 		SystemError( ERROR_BAD_ARGUMENTS );
