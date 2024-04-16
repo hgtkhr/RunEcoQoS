@@ -9,7 +9,7 @@ https://devblogs.microsoft.com/performance-diagnostics/introducing-ecoqos/
 This repository describes the ability to explicitly launch an executable file as an Eco QoS process.
 The program uses the following method to make an application process EcoQoS
 1. Set **PROCESS_POWER_THROTTLING_EXECUTION_SPEED** to the **ControlMask** and **StateMask** members of the **PROCESS_POWER_THROTTLING_STATE** structure, and Apply the settings with the **SetProcessInformation** API function.
-1. (if necessary) Set the priority of the application process to **IDLE_PRIORITY_CLASS** in the **SetPriorityClass** API function.
+1. Set the priority of the application process to **IDLE_PRIORITY_CLASS** in the **SetPriorityClass** API function.
 1. (Optional) You can also set the memory priority by command line option.
 
 ## Command line option: 
@@ -18,7 +18,7 @@ The program uses the following method to make an application process EcoQoS
   
 The operating priority of processes and threads is set based on the value of this setting.  
 Set an appropriate value for stable operation of the application.  
-If the default **/Priority:NORMAL** does not attach the efficiency mode icon in the task manager, try setting it to **/Priority:IDLE**.  
+The default value is **/Priority:IDLE**.  
 See **[SetPriorityClass function (processthreadsapi.h)](https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-setpriorityclass) .**  
   
 Value|Meaning
