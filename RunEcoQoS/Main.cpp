@@ -79,7 +79,6 @@ inline bool ParseProcessPriority( DWORD& processPriority, const string_t& argume
 		{ _T( "BELOW_NORMAL" ), BELOW_NORMAL_PRIORITY_CLASS },
 		{ _T( "HIGH" ), HIGH_PRIORITY_CLASS },
 		{ _T( "IDLE" ), IDLE_PRIORITY_CLASS },
-		{ _T( "BACKGROUND" ), PROCESS_MODE_BACKGROUND_BEGIN },
 		{ _T( "REALTIME" ), REALTIME_PRIORITY_CLASS },
 		{ _T( "NORMAL" ), NORMAL_PRIORITY_CLASS },
 	};
