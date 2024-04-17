@@ -14,7 +14,7 @@ The program uses the following method to make an application process EcoQoS
 
 ## Command line option: 
   
-`/Priority:{ABOVE_NORMAL|BELOW_NORMAL|HIGH|IDLE|NORMAL|BACKGROUND|REALTIME}`  
+`/Priority:{ABOVE_NORMAL|BELOW_NORMAL|HIGH|IDLE|NORMAL|REALTIME}`  
   
 The operating priority of processes and threads is set based on the value of this setting.  
 Set an appropriate value for stable operation of the application.  
