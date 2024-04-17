@@ -47,7 +47,7 @@ BELOW_NORMAL|Below normal memory priority.
 NORMAL|This is the default priority for all threads and processes on the system.  
 
 ## Requirements
-RunEcoQos is written by Visual Studio C++ 2022. Therefore, Visual Studio 2022 is required. Also, please install the latest Windows SDK.
+RunEcoQoS is written by Visual Studio C++ 2022. Therefore, Visual Studio 2022 is required. Also, please install the latest Windows SDK.
 
 ## How to build and install
 Clone this repository and open `RunEcoQoS.sln`.
