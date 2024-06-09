@@ -3,14 +3,14 @@
 
 using std::filesystem::path;
 
-template < typename StringT = std::wstring, bool IsUnicode = true >
+template < typename StringT = std::wstring >
 inline StringT ToString( const path& p )
 {
 	return p.native();
 }
 
 template <>
-inline std::string ToString< std::string, false >( const path& p )
+inline std::string ToString< std::string >( const path& p )
 {
 	return p.string();
 }
