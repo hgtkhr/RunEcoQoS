@@ -11,7 +11,7 @@
 	throw std::system_error( ec );
 }
 
-std::wstring ToWideMessgaeString( const std::string& message )
+std::wstring ToWideMessageString( const std::string& message )
 {
 	std::size_t length = ::MultiByteToWideChar( CP_THREAD_ACP, 0, message.c_str(), -1, nullptr, 0 );
 

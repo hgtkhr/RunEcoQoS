@@ -24,8 +24,6 @@ struct safe_handle_closer
 	}
 };
 
-using char_t = TCHAR;
-using string_t = std::basic_string< char_t >;
 using scoped_handle = std::unique_ptr< HANDLE, safe_handle_closer< HANDLE > >;
 
 inline bool ParseMemPriority( MEMORY_PRIORITY_INFORMATION& memPriority, const string_t& argument )
@@ -100,7 +98,7 @@ inline bool ParseProcessPriority( DWORD& processPriority, const string_t& argume
 void Run( int argc, char_t** argv )
 {
 	string_t cmdline;
-	string_t appname = ToString( ComplatePath( argv[1] ) );
+	string_t appname = ToString< string_t >( ComplatePath( argv[1] ) );
 
 	if ( std::ranges::any_of( appname, &::_istspace ) )
 		cmdline = std::format( _T( "\"{}\"" ), appname );
@@ -179,7 +177,7 @@ int _tmain( int argc, char_t** argv )
 	}
 	catch ( std::system_error& e )
 	{
-		::MessageBox( HWND_DESKTOP, MessgaeString( e.what() ).c_str(), nullptr, MB_OK | MB_ICONERROR);
+		::MessageBox( HWND_DESKTOP, MessageString< string_t >( e.what() ).c_str(), nullptr, MB_OK | MB_ICONERROR);
 		return e.code().value();
 	}
 

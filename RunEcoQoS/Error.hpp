@@ -5,16 +5,16 @@
 using ec_t = unsigned long;
 
 [[noreturn]] void SystemError( ec_t errorCode );
-std::wstring ToWideMessgaeString( const std::string& message );
+std::wstring ToWideMessageString( const std::string& message );
 
 template < typename StringT = std::wstring >
-inline StringT MessgaeString( const std::string& message )
+inline StringT MessageString( const std::string& message )
 {
-	return ToWideMessgaeString( message );
+	return ToWideMessageString( message );
 }
 
 template <>
-inline std::string MessgaeString< std::string >( const std::string& message )
+inline std::string MessageString< std::string >( const std::string& message )
 {
 	return message;
 }

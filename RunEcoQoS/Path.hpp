@@ -3,8 +3,18 @@
 
 using std::filesystem::path;
 
-template < typename StringT = std::wstring >
+using char_t = TCHAR;
+using string_t = std::basic_string< char_t >;
+using path_string_t = typename path::string_type;
+
+template < typename StringT >
 inline StringT ToString( const path& p )
+{
+	return p.string< StringT >();
+}
+
+template <>
+inline path_string_t ToString( const path& p )
 {
 	return p.native();
 }

@@ -13,7 +13,7 @@ path ComplatePath( const path& p )
 	if ( p.has_parent_path() )
 		return std::filesystem::canonical( p );
 
-	auto pstr = ToString( p );
+	auto pstr = ToString< string_t >( p );
 
 	std::vector< TCHAR > szSearchPath( MAX_PATH );
 	while ( true )
